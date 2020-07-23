@@ -9,4 +9,4 @@ It was originally written for the [NatCom-soundmatching](https://github.com/Odys
 project that involves matching sounds with a synthesizer and genetic algorithms.
 
 The architecture of the synthesizer so far is the following.
-![synth diagram](https://github.com/OdysseasKr/simple-synth/blob/master/synthdiagram.pdf?raw=true)
+![synth diagram](https://github.com/OdysseasKr/simple-synth/blob/master/synthdiagram.png?raw=true)
