@@ -3,6 +3,7 @@ import numpy as np
 import itertools
 from synthplayer.oscillators import Sine, Triangle, Square, SquareH, Sawtooth
 from synthplayer.oscillators import Pulse, WhiteNoise, Semicircle, MixingFilter
+from synthplayer.oscillators import EnvelopeFilter
 from synthplayer import params
 from .filters import LowPassFilter
 
@@ -49,6 +50,11 @@ class Synth(ABC):
         self.osc_2 = osc_2_options[self.osc_2_name]
         self.mix = kwargs.get('mix', 0.5)
         self.phase_1 = kwargs.get('phase_1', 0)
+        self.attack = kwargs.get('attack', 0)
+        self.decay = kwargs.get('decay', 0)
+        self.sustain = kwargs.get('sustain', 1)
+        self.sustain_level = kwargs.get('sustain_level', 1)
+        self.release = kwargs.get('release', 0)
         self.cutoff = kwargs.get('cutoff', 10000)
 
     def _check_parameters_values(self, kwargs):
@@ -60,6 +66,10 @@ class Synth(ABC):
             raise AssertionError('Parameter `mix` should be in the range [0,1]')
         if kwargs.get('phase', 0) < 0 or kwargs.get('phase', 0) > 0.5:
             raise AssertionError('Parameter `phase` should be in the range [0,0.5]')
+        if kwargs.get('attack', 0) < 0 or kwargs.get('decay', 0) < 0 or kwargs.get('sustain', 0) < 0 or kwargs.get('release', 0) < 0:
+            raise AssertionError('ADSR parameters should be >= 0')
+        if kwargs.get('sustain_level', 0) < 0 or kwargs.get('sustain_level', 0) > 1:
+            raise AssertionError('Parameter `sustain_level` should be in the range [0,1]')
 
     def get_parameters(self):
         """Returns a dict with the current paramters"""
@@ -86,7 +96,13 @@ class Synth(ABC):
                           amplitude=self.mix,
                           samplerate=self.sr)
         mixer = MixingFilter(osc1, osc2)
-        self.out = LowPassFilter(mixer, cutoff=self.cutoff, samplerate=self.sr)
+        adsr = EnvelopeFilter(mixer,
+                              attack=self.attack,
+                              decay=self.decay,
+                              sustain=self.sustain,
+                              sustain_level=self.sustain_level,
+                              release=self.release)
+        self.out = LowPassFilter(adsr, cutoff=self.cutoff, samplerate=self.sr)
 
     def get_sound_array(self, note=440, duration=1):
         """Returns a sound for the set parameters
