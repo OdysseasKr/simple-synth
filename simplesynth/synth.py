@@ -30,14 +30,14 @@ osc_2_options = {
 
 
 class Synth(ABC):
-    def __init__(self, sf=44100):
+    def __init__(self, sr=44100):
         """
         Parameters
         ----------
-        sf : int
+        sr : int
             Samplerate used for the resulting sounds
         """
-        self.sf = sf
+        self.sr = sr
         self.set_parameters()
 
     def set_parameters(self, **kwargs):
@@ -72,12 +72,12 @@ class Synth(ABC):
         osc1 = self.osc_1(note,
                           amplitude=1 - self.mix,
                           phase=self.phase_1,
-                          samplerate=self.sf)
+                          samplerate=self.sr)
         osc2 = self.osc_2(note,
                           amplitude=self.mix,
-                          samplerate=self.sf)
+                          samplerate=self.sr)
         mixer = MixingFilter(osc1, osc2)
-        self.out = LowPassFilter(mixer, cutoff=self.cutoff, samplerate=self.sf)
+        self.out = LowPassFilter(mixer, cutoff=self.cutoff, samplerate=self.sr)
 
     def get_sound_array(self, note=440, duration=1):
         """Returns a sound for the set parameters
