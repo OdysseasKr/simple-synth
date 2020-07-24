@@ -42,7 +42,7 @@ class Synth(ABC):
 
     def set_parameters(self, **kwargs):
         """Sets the parameters of the synth"""
-        # TODO: Add range check for phase, mix and cuttoff
+        self._check_parameters_values(kwargs)
         self.osc_1_name = kwargs.get('osc_1', 'Sine')
         self.osc_1 = osc_1_options[self.osc_1_name]
         self.osc_2_name = kwargs.get('osc_2', 'Sine')
@@ -50,6 +50,16 @@ class Synth(ABC):
         self.mix = kwargs.get('mix', 0.5)
         self.phase_1 = kwargs.get('phase_1', 0)
         self.cutoff = kwargs.get('cutoff', 10000)
+
+    def _check_parameters_values(self, kwargs):
+        if kwargs.get('osc_1', 'Sine') not in osc_1_options:
+            raise AssertionError('Invalid shape for osc 1')
+        if kwargs.get('osc_2', 'Sine') not in osc_2_options:
+            raise AssertionError('Invalid shape for osc 2')
+        if kwargs.get('mix', 0.5) < 0 or kwargs.get('mix', 0.5) > 1 :
+            raise AssertionError('Parameter `mix` should be in the range [0,1]')
+        if kwargs.get('phase', 0) < 0 or kwargs.get('phase', 0) > 0.5:
+            raise AssertionError('Parameter `phase` should be in the range [0,0.5]')
 
     def get_parameters(self):
         """Returns a dict with the current paramters"""
@@ -63,7 +73,7 @@ class Synth(ABC):
 
     def _get_raw_data_from_obj(self, obj, duration):
         # TODO: This doesn't work with duration < 1
-        num_blocks = self.sf*duration//params.norm_osc_blocksize
+        num_blocks = self.sr*duration//params.norm_osc_blocksize
         tmp = np.array(list(itertools.islice(obj.blocks(), num_blocks)))
         return tmp.flatten()
 
