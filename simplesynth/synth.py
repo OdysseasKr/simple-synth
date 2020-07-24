@@ -62,13 +62,13 @@ class Synth(ABC):
             raise AssertionError('Invalid shape for osc 1')
         if kwargs.get('osc_2', 'Sine') not in osc_2_options:
             raise AssertionError('Invalid shape for osc 2')
-        if kwargs.get('mix', 0.5) < 0 or kwargs.get('mix', 0.5) > 1 :
+        if not 0 <= kwargs.get('mix', 0.5) <= 1:
             raise AssertionError('Parameter `mix` should be in the range [0,1]')
-        if kwargs.get('phase', 0) < 0 or kwargs.get('phase', 0) > 0.5:
+        if not 0 <= kwargs.get('phase', 0) <= 0.5:
             raise AssertionError('Parameter `phase` should be in the range [0,0.5]')
         if kwargs.get('attack', 0) < 0 or kwargs.get('decay', 0) < 0 or kwargs.get('sustain', 0) < 0 or kwargs.get('release', 0) < 0:
             raise AssertionError('ADSR parameters should be >= 0')
-        if kwargs.get('sustain_level', 0) < 0 or kwargs.get('sustain_level', 0) > 1:
+        if not 0 <= kwargs.get('sustain_level', 0) <= 1:
             raise AssertionError('Parameter `sustain_level` should be in the range [0,1]')
 
     def get_parameters(self):
