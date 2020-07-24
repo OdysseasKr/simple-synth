@@ -72,8 +72,7 @@ class Synth(ABC):
         }
 
     def _get_raw_data_from_obj(self, obj, duration):
-        # TODO: This doesn't work with duration < 1
-        num_blocks = self.sr*duration//params.norm_osc_blocksize
+        num_blocks = int(self.sr*duration//params.norm_osc_blocksize)
         tmp = np.array(list(itertools.islice(obj.blocks(), num_blocks)))
         return tmp.flatten()
 
