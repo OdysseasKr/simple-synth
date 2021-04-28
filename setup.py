@@ -5,9 +5,9 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="simplesynth",
-    version="0.0.1",
-    author="Ody",
-    description="A simple-to-use subtractive synthesizer for Python..",
+    version="1.0.0",
+    author="OdysseasKr",
+    description="A simple-to-use subtractive synthesizer for Python.",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/OdysseasKr/simple-synth",
@@ -15,6 +15,11 @@ setuptools.setup(
     classifiers=[
         "Programming Language :: Python :: 3",
         "Operating System :: OS Independent",
+    ],
+    install_requires=[
+        "numpy==1.20.2",
+        "scipy==1.5.2",
+        "synthplayer==2.5"
     ],
     python_requires='>=3.5',
 )
