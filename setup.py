@@ -17,7 +17,7 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ],
     install_requires=[
-        "numpy==1.20.2",
+        "numpy==1.22.0",
         "scipy==1.5.2",
         "synthplayer==2.5"
     ],
